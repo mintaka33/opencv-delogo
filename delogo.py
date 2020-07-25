@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-imgfile = '1.jpg'
+imgfile = 'test.bmp'
 refPt = []
 cropping = False
 
@@ -36,13 +36,27 @@ while True:
     elif key == 13: # press enter to continue
         break
 
+cv2.destroyAllWindows()
+srcvideo = 'IMG_4027.mp4'
+cap = cv2.VideoCapture(srcvideo)
+if not cap.isOpened():
+    print("ERROR: Cannot open VideoCapture")
+    exit()
+
 if len(refPt) == 2:
     pos = [(int(refPt[0][0]*scale), int(refPt[0][1]*scale))]
     pos.append((int(refPt[1][0]*scale), int(refPt[1][1]*scale)))
     roi = image[pos[0][1]:pos[1][1], pos[0][0]:pos[1][0]]
     gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
     mask[pos[0][1]:pos[1][1], pos[0][0]:pos[1][0]] = 100
-    dst = cv2.inpaint(image, mask, 3, cv2.INPAINT_TELEA)
-    cv2.imwrite('out_'+imgfile.split('.')[0]+'.png', dst)
+    frame_num = 0
+    while True:
+        ret, frame = cap.read()
+        if ret == False:
+            break
+        dst = cv2.inpaint(frame, mask, 3, cv2.INPAINT_TELEA)
+        outfile = './out/' + str(frame_num) + '.bmp'
+        cv2.imwrite(outfile, dst)
+        frame_num += 1
 
-cv2.destroyAllWindows()
+print('done')
