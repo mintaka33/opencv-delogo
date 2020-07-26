@@ -37,7 +37,7 @@ while True:
         break
 
 cv2.destroyAllWindows()
-srcvideo = 'IMG_4027.mp4'
+srcvideo = './test/IMG_4027.mp4'
 cap = cv2.VideoCapture(srcvideo)
 if not cap.isOpened():
     print("ERROR: Cannot open VideoCapture")
@@ -46,9 +46,14 @@ if not cap.isOpened():
 if len(refPt) == 2:
     pos = [(int(refPt[0][0]*scale), int(refPt[0][1]*scale))]
     pos.append((int(refPt[1][0]*scale), int(refPt[1][1]*scale)))
-    roi = image[pos[0][1]:pos[1][1], pos[0][0]:pos[1][0]]
-    gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-    mask[pos[0][1]:pos[1][1], pos[0][0]:pos[1][0]] = 100
+    logo_img = image[pos[0][1]:pos[1][1], pos[0][0]:pos[1][0]]
+    #cv2.imwrite('logo_img.bmp', logo_img)
+    logo_gray = cv2.cvtColor(logo_img, cv2.COLOR_BGR2GRAY)
+    #cv2.imwrite('logo_gray.bmp', logo_gray)
+    logo_binary = cv2.threshold(logo_gray, 128, 255, cv2.THRESH_BINARY)[1]
+    #cv2.imwrite('logo_binary.bmp', logo_binary)
+    mask[pos[0][1]:pos[1][1], pos[0][0]:pos[1][0]] = 255 #logo_binary
+    #cv2.imwrite('mask.bmp', mask)
     frame_num = 0
     while True:
         ret, frame = cap.read()
