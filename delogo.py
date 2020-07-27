@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-imgfile = 'test.bmp'
+imgfile = '1.jpg'
 refPt = []
 cropping = False
 
@@ -37,7 +37,7 @@ while True:
         break
 
 cv2.destroyAllWindows()
-srcvideo = './test/IMG_4027.mp4'
+srcvideo = imgfile # './test/IMG_4027.mp4'
 cap = cv2.VideoCapture(srcvideo)
 if not cap.isOpened():
     print("ERROR: Cannot open VideoCapture")
@@ -60,7 +60,7 @@ if len(refPt) == 2:
         if ret == False:
             break
         dst = cv2.inpaint(frame, mask, 3, cv2.INPAINT_TELEA)
-        outfile = './out/' + str(frame_num) + '.bmp'
+        outfile = 'out_' + str(frame_num) + '.bmp'
         cv2.imwrite(outfile, dst)
         frame_num += 1
 
